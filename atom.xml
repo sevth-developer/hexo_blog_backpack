@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://sevth.com/"/>
-  <updated>2020-04-10T22:49:13.728Z</updated>
+  <updated>2020-04-14T09:23:54.022Z</updated>
   <id>https://sevth.com/</id>
   
   <author>
@@ -15,6 +15,68 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mac小技巧：更新失败怎么当做什么都没有发生过</title>
+    <link href="https://sevth.com/Mac/tips/Mac%E5%B0%8F%E6%8A%80%E5%B7%A7%EF%BC%9A%E6%9B%B4%E6%96%B0%E5%A4%B1%E8%B4%A5%E6%80%8E%E4%B9%88%E5%BD%93%E5%81%9A%E4%BB%80%E4%B9%88%E9%83%BD%E6%B2%A1%E6%9C%89%E5%8F%91%E7%94%9F%E8%BF%87.html"/>
+    <id>https://sevth.com/Mac/tips/Mac%E5%B0%8F%E6%8A%80%E5%B7%A7%EF%BC%9A%E6%9B%B4%E6%96%B0%E5%A4%B1%E8%B4%A5%E6%80%8E%E4%B9%88%E5%BD%93%E5%81%9A%E4%BB%80%E4%B9%88%E9%83%BD%E6%B2%A1%E6%9C%89%E5%8F%91%E7%94%9F%E8%BF%87.html</id>
+    <published>2020-04-14T06:53:51.000Z</published>
+    <updated>2020-04-14T09:23:54.022Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>这篇文章仅针对于黑苹果用户，如果是白苹果，应该也是可以这么做的，本文仅提供参考，给一台非<code>mac</code>机器装上<code>Mac OS</code>系统称为黑苹果(hackintosh)，虽然这违反了苹果公司的最终用户许可协议(<a href="https://www.apple.com/legal/sla/">EULA</a>)，但是这是一种极客体验的方式。我不推荐这么做，并且最终选择权在你手中。</p><p>系统更新失败怎么办？启动界面多了一个烦人的图标？</p></blockquote><a id="more"></a><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>最近 <code>Mac</code> 推送了<a href="https://support.apple.com/zh-cn/HT211100">2020-002 更新</a> 手贱点了更新按钮，然后开机的时候一直卡着进度条没动，只好重启电脑重新进系统，然而这个启动选项可是一直都在，真是讨厌😠。</p><h2 id="参考办法"><a href="#参考办法" class="headerlink" title="参考办法"></a>参考办法</h2><h3 id="使用软件修改-config-plist-，将启动项隐藏。（仅限黑苹果用户）-不推荐"><a href="#使用软件修改-config-plist-，将启动项隐藏。（仅限黑苹果用户）-不推荐" class="headerlink" title="使用软件修改 config.plist ，将启动项隐藏。（仅限黑苹果用户）(不推荐)"></a>使用软件修改 <code>config.plist</code> ，将启动项隐藏。（仅限黑苹果用户）(不推荐)</h3><ol><li><p>使用 <code>clover configurator</code> 软件，挂载分区</p><p><img src="https://img.sevth.com/website/2020/04/14/825bd574da168e172c831a37f90f6a63.png" alt="image-20200414153101431"></p></li><li><p><strong>修改 <code>引导界面</code> 设置</strong></p><p><img src="https://img.sevth.com/website/2020/04/14/6b63c7f9dcb82b2ca00c239d1a23881b.png" alt="image-20200414153333742"></p><p>添加一条记录，参照值为你在开机时看到的选项名称。</p></li><li><p>保存设置。</p></li></ol><h3 id="进入系统，删除更新安装文件（白苹果适用）（推荐）"><a href="#进入系统，删除更新安装文件（白苹果适用）（推荐）" class="headerlink" title="进入系统，删除更新安装文件（白苹果适用）（推荐）"></a>进入系统，删除更新安装文件（白苹果适用）（推荐）</h3><ol><li><p>打开终端软件（打开方法见：<a href="https://sevth.com/Mac/tips/Mac小技巧：去掉更新设置小红点.html">点我查看</a>）</p></li><li><p>输入如下指令删除 <code>更新文件夹</code></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -r /<span class="string">"Macos install data"</span></span><br></pre></td></tr></table></figure><p>中间需要输入密码，密码不显示。</p><p>如果提示文件夹不存在，就使用 <code>ls /</code> 指令查看一下根目录，有一个类似上面名称的文件夹，再输入上面的指令，替换成正确的文件夹名称执行即可。</p></li></ol><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul><li>无论白苹果还是黑苹果，在更新之前都应该使用时间机器做好备份，避免意外情况发生导致数据丢失！</li></ul><h3 id="可能用到的软件"><a href="#可能用到的软件" class="headerlink" title="可能用到的软件"></a>可能用到的软件</h3><p><a href="https://cdn.sevth.com/website/2020/04/14/ca90071a7d66ff9dead7e20be43b5697.zip">CloverConfigur5630</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这篇文章仅针对于黑苹果用户，如果是白苹果，应该也是可以这么做的，本文仅提供参考，给一台非&lt;code&gt;mac&lt;/code&gt;机器装上&lt;code&gt;Mac OS&lt;/code&gt;系统称为黑苹果(hackintosh)，虽然这违反了苹果公司的最终用户许可协议(&lt;a href=&quot;https://www.apple.com/legal/sla/&quot;&gt;EULA&lt;/a&gt;)，但是这是一种极客体验的方式。我不推荐这么做，并且最终选择权在你手中。&lt;/p&gt;
+&lt;p&gt;系统更新失败怎么办？启动界面多了一个烦人的图标？&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="Mac" scheme="https://sevth.com/categories/Mac/"/>
+    
+      <category term="tips" scheme="https://sevth.com/categories/Mac/tips/"/>
+    
+    
+      <category term="Mac" scheme="https://sevth.com/tags/Mac/"/>
+    
+      <category term="hackintosh" scheme="https://sevth.com/tags/hackintosh/"/>
+    
+      <category term="clover" scheme="https://sevth.com/tags/clover/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Mac小技巧：去掉更新设置小红点</title>
+    <link href="https://sevth.com/Mac/tips/Mac%E5%B0%8F%E6%8A%80%E5%B7%A7%EF%BC%9A%E5%8E%BB%E6%8E%89%E6%9B%B4%E6%96%B0%E8%AE%BE%E7%BD%AE%E5%B0%8F%E7%BA%A2%E7%82%B9.html"/>
+    <id>https://sevth.com/Mac/tips/Mac%E5%B0%8F%E6%8A%80%E5%B7%A7%EF%BC%9A%E5%8E%BB%E6%8E%89%E6%9B%B4%E6%96%B0%E8%AE%BE%E7%BD%AE%E5%B0%8F%E7%BA%A2%E7%82%B9.html</id>
+    <published>2020-04-14T05:38:00.000Z</published>
+    <updated>2020-04-14T07:01:34.542Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>Mac 系统是苹果家的产品，自然而然地继承了苹果系列的一些“优点”，比如无时不刻在提醒着你更新，像是催命一样的提醒。假如我们并不想更新呢，或者已经更新了但是更新失败了怎么办？</p><p>Let’s Go!</p></blockquote><a id="more"></a><h2 id="讨厌的小红点就像下面一样"><a href="#讨厌的小红点就像下面一样" class="headerlink" title="讨厌的小红点就像下面一样"></a>讨厌的小红点就像下面一样</h2><p><img src="https://img.sevth.com/website/2020/04/14/4aa90e6de456543029873749af80bc97.png" alt="image-20200414140733567"></p><h2 id="操作指南"><a href="#操作指南" class="headerlink" title="操作指南"></a>操作指南</h2><h3 id="关闭系统的更新提醒"><a href="#关闭系统的更新提醒" class="headerlink" title="关闭系统的更新提醒"></a>关闭系统的更新提醒</h3><blockquote><p>打开设置-&gt;软件更新-&gt;高级-&gt;取消所有勾选 ☑️</p></blockquote><p>如下：</p><p><img src="https://img.sevth.com/website/2020/04/14/b050b4871fa037072baf7297e76a1557.png" alt="image-20200414141615901"></p><p>取消掉所有选项后，就不会自动检查更新，也不会提示你更新了。</p><h3 id="关闭小红点"><a href="#关闭小红点" class="headerlink" title="关闭小红点"></a>关闭小红点</h3><ol><li><p>打开启动台</p></li><li><p>直接输入 <code>ter</code> 搜索终端软件</p><p><img src="https://img.sevth.com/website/2020/04/14/74a06eac5979e44ec785ac541e666a42.png" alt="image-20200414143416202"></p></li><li><p>打开终端工具，输入如下的指令到终端</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaults write com.apple.systempreferences AttentionPrefBundleIDs 0</span><br></pre></td></tr></table></figure></li><li><p>重启 <code>Dock</code> （可选）</p><p>这个操作可以快速见效，就是桌面底部的 <code>Dock</code> 不再显示小红点。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">killall Dock   //注意大小写</span><br></pre></td></tr></table></figure></li><li><p>终极消除办法：重启电脑。将在设置界面也去掉小红点，只要不点开更新，一直有效。</p><p>相关指令输入参考：</p><p><img src="https://img.sevth.com/website/2020/04/14/644eff96d0546c649662d2b332bec825.png" alt="image-20200414144236479"></p><p>最终效果如下：</p><p><img src="https://img.sevth.com/website/2020/04/14/d3af2b56a9683993451d1f4921988f73.png" alt="image-20200414144553294"></p><p><img src="https://img.sevth.com/website/2020/04/14/630004aab6aeeb687c1ab16743157f66.png" alt="image-20200414144640675"></p><p><img src="https://img.sevth.com/website/2020/04/14/ac75111c43cca711220e4d8c07652b88.png" alt="image-20200414144614063"></p><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;Mac 系统是苹果家的产品，自然而然地继承了苹果系列的一些“优点”，比如无时不刻在提醒着你更新，像是催命一样的提醒。假如我们并不想更新呢，或者已经更新了但是更新失败了怎么办？&lt;/p&gt;
+&lt;p&gt;Let’s Go!&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="Mac" scheme="https://sevth.com/categories/Mac/"/>
+    
+      <category term="tips" scheme="https://sevth.com/categories/Mac/tips/"/>
+    
+    
+      <category term="Mac" scheme="https://sevth.com/tags/Mac/"/>
+    
+      <category term="hackintosh" scheme="https://sevth.com/tags/hackintosh/"/>
+    
+  </entry>
   
   <entry>
     <title>“Markdown编辑器语法指南”</title>
