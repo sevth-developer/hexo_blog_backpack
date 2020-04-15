@@ -77,6 +77,8 @@ function getDateDiff(dateTimeStamp) {
 
 var expireTime1H = 1000 * 60 * 60; // 1小时过期
 function isNightRange(beginTime, endTime) {
+    let now = new Date();
+
     let nowDate = new Date();
     var nowTime = nowDate.getHours() + ":" + nowDate.getMinutes();
     var strb = beginTime.split(":");
@@ -105,11 +107,11 @@ function isNightRange(beginTime, endTime) {
     n.setHours(strn[0]);
     n.setMinutes(strn[1]);
 
-    console.log(n.getTime());
+    // console.log(n.getTime());
     if (n.getTime() - b.getTime() > 0 && n.getTime() - e.getTime() < 0) {
         return true;
     } else {
-        console.log("now Date is：" + n.getHours() + ":" + n.getMinutes() + "，is not Night！");
+        // console.log("now Date is：" + n.getHours() + ":" + n.getMinutes() + "，is not Night！");
         return false;
     }
 }
