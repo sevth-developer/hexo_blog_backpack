@@ -42,7 +42,7 @@
                 setTimeout(() => {
                     element.style.opacity = '1';
                     element.style.transform = '';
-                    element.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+                    element.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out, background-color 0.4s ease-out';
                 }, i * 100);
                 i++;
             });

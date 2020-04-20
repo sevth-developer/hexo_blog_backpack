@@ -6,16 +6,8 @@
  * mail: sevthdev@gmail.com
  */
 let isNight;
-let nightNav;
-let nightIcon;
-
-let chrome_color;
-let wp_color;
-let ios_color;
 
 const expireTime1H = 1000 * 60 * 60; // 1小时过期
-
-
 
 Storage.prototype.getExpire = key => {
     let val = localStorage.getItem(key);
@@ -30,162 +22,231 @@ Storage.prototype.getExpire = key => {
     return val.data;
 };
 
-Date.prototype.Format = function (fmt) { //author: meizz
-    const o = {
-        "M+": this.getMonth() + 1,                 //月份
-        "d+": this.getDate(),                    //日
-        "h+": this.getHours(),                   //小时
-        "m+": this.getMinutes(),                 //分
-        "s+": this.getSeconds(),                 //秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-        "S": this.getMilliseconds()             //毫秒
+Storage.prototype.setExpire = (key, value, expire) => {
+    const obj = {
+        data: value,
+        time: Date.now(),
+        expire: expire
     };
-    if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (let k in o)
-        if (new RegExp("(" + k + ")").test(fmt))
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    return fmt;
+    localStorage.setItem(key, JSON.stringify(obj));
 };
 
+// 夜间判断
 const isNightRange = (beginTime, endTime) => {
     if (beginTime.indexOf(':') === -1 || endTime.indexOf(':') === -1) return false;
-    let n = new Date();
-    let d = n.toLocaleDateString();
-    let b = new Date(`${d} ${beginTime}`);
-    let e = new Date(`${d} ${endTime}`);
+    const n = new Date();
+    const d = n.toLocaleDateString();
+    const b = new Date(`${d} ${beginTime}`);
+    const e = new Date(`${d} ${endTime}`);
     return n.getTime() - b.getTime() > 0 && n.getTime() - e.getTime() < 0;
 };
 
-const getDateDiff = (dateTimeStamp) => {
-    let minute = 1000 * 60;
-    let hour = minute * 60;
-    let day = hour * 24;
-    let halfMonth = day * 15;
-    let month = day * 30;
-    let now = new Date().getTime();
-    let diffValue = now - dateTimeStamp;
-    if (diffValue < 0) {
-        return;
-    }
-    let monthC = diffValue / month;
-    let weekC = diffValue / (7 * day);
-    let dayC = diffValue / day;
-    let hourC = diffValue / hour;
-    let minC = diffValue / minute;
-    let result;
-    if (monthC >= 1) {
-        result = " " + Math.floor(monthC) + "月前";
-    } else if (weekC >= 1) {
-        result = " " + Math.floor(weekC) + "周前";
-    } else if (dayC >= 1) {
-        result = " " + Math.floor(dayC) + "天前";
-    } else if (hourC >= 1) {
-        result = " " + Math.floor(hourC) + "小时前";
-    } else if (minC >= 1) {
-        result = " " + Math.floor(minC) + "分钟前";
-    } else
-        result = " 刚刚";
-    return result;
-};
-
 // 注册深色模式服务
-
 const RegisterDarkModeServer = () => {
     isNight = localStorage.getExpire('night');
     if (isNight == null) {
-        isNight = !!(isNightRange("19:00", "23:59:59:999") || isNightRange("00:00", "07:00"));
-        localStorage.setExpire("night", isNight, expireTime1H);
+        isNight = !!(isNightRange('19:00', '23:59:59:999') || isNightRange('00:00', '07:00'));
+        localStorage.setExpire('night', isNight, expireTime1H);
     }
-    nightNav = document.getElementById('night-nav');
-    nightIcon = document.getElementById('night-icon');
-    chrome_color = document.getElementsByName('theme-color');   //
-    wp_color = document.getElementsByName('msapplication-navbutton-color');
-    ios_color = document.getElementsByName('apple-mobile-web-app-status-bar-style');
-
+    // eslint-disable-next-line no-use-before-define
     applyNight(isNight);
-    nightNav.addEventListener('click', switchNight);
-
+    $('#dark-mode').click(() => {
+        isNight = !isNight;
+        // eslint-disable-next-line no-use-before-define
+        applyNight(isNight);
+        localStorage.setExpire('night', isNight, expireTime1H);
+    });
 };
 
-//应用夜间模式
-const applyNight = (value) => {
+// 应用夜间模式
+const applyNight = value => {
     if (value) {
-        document.body.className += ' night';
-        nightIcon.className = nightIcon.className.replace(/ fa-moon/g, '') + ' fa-sun';
-        chrome_color[0].content = "#21242b";
-        wp_color[0].content = "#21242b";
-        ios_color[0].content = "#21242b";
+        $('body').addClass('night').removeClass('ready');
+        $('#night-icon').removeClass('fa-moon').addClass('fa-sun');
+        $('meta[name="theme-color"]').attr('content', '#21242b');
+        $('meta[name="msapplication-navbutton-color"]').attr('content', '#21242b');
+        $('meta[name="apple-mobile-web-app-status-bar-style"]').attr('content', '#21242b');
+        // eslint-disable-next-line new-cap,no-use-before-define
+        ParticlesAppJs();
     } else {
-        document.body.className = document.body.className.replace(/ night/g, '');
-        nightIcon.className = nightIcon.className.replace(/ fa-sun/g, '') + ' fa-moon';
-        chrome_color[0].content = "#FFFFFF";
-        wp_color[0].content = "#FFFFFF";
-        ios_color[0].content = "#FFFFFF";
+        $('body').removeClass('night').addClass('ready');
+        $('#night-icon').removeClass('fa-sun').addClass('fa-moon');
+        $('meta[name="theme-color"]').attr('content', '#FFFFFF');
+        $('meta[name="msapplication-navbutton-color"]').attr('content', '#FFFFFF');
+        $('meta[name="apple-mobile-web-app-status-bar-style"]').attr('content', '#FFFFFF');
     }
 };
 
-//切换开关
-const switchNight = () => {
-    isNight = !isNight;
-    applyNight(isNight);
-    localStorage.setExpire('night', isNight, expireTime1H);
-};
-
-const SiteTimeFrom = (time) => {
-    let diffTime = new Date( new Date() - new Date(time));
-    let day = Math.floor(diffTime / 24 /3.6e6);
-    return  "❤️本站自<span><strong> "+time.split(" ")[0].replace(/\//g,".")+"</strong><span> 已运行 <strong>" + day + "</strong> 天 <strong>" + diffTime.getUTCHours() + "</strong> 小时 <strong>" + diffTime.getUTCMinutes() + "</strong> 分 <strong>" + diffTime.getUTCSeconds() + "</strong> 秒！❤️";
+const SiteTimeFrom = time => {
+    const diffTime = new Date(new Date() - new Date(time));
+    const day = Math.floor(diffTime / 24 / 3.6e6);
+    return '❤️本站自<span><strong> ' + time.split(' ')[0].replace(/\//g, '.') + '</strong><span> 已运行 <strong>' + day + '</strong> 天 <strong>' + diffTime.getUTCHours() + '</strong> 小时 <strong>' + diffTime.getUTCMinutes() + '</strong> 分 <strong>' + diffTime.getUTCSeconds() + '</strong> 秒！❤️';
 };
 
 const RegisterOperationTimeServer = () => {
-    let spanElement = document.getElementById('operation-time');
-    if (spanElement)
-    setInterval(() => {
-        spanElement.innerHTML = SiteTimeFrom(spanElement.dataset.time)
-    }, 1000);
+    const spanElement = document.getElementById('operation-time');
+    if (spanElement) {
+        setInterval(() => {
+            // eslint-disable-next-line new-cap
+            spanElement.innerHTML = SiteTimeFrom(spanElement.dataset.time);
+        }, 1000);
+    }
 };
 
-const run = () => {
-    if (document.addEventListener) {                //兼容主流浏览器
-        document.addEventListener('DOMContentLoaded',
-            function a() {
-                document.removeEventListener('DOMContentLoaded', a, false);
-                main();
-                // console.log('DOMContentLoaded')
-            }
-            // main
-            , false);
-    }
+const RegisterParticleServer = () => {
+    const script = document.createElement('script');
+    script.src = '/customize/particles/particles.min.js';
+    $('body').append(script).prepend('<div id="particles"></div>');
+};
 
-    else if (document.attachEvent) {                //兼容IE8+
-        document.attachEvent('onreadystatechange', function a() {
-            if (document.readyState === 'complete') {
-                document.detachEvent('onreadystatechange', a);
-                main();
-                // console.log('onreadystatechange')
-            }
-        });
-
-        if (document.documentElement.doScroll && typeof window.frameElement === 'undefined') { //兼容低版本IE
-            try {
-                document.documentElement.doScroll('left');
-            } catch (e) {
-                return setTimeout(ready, 50);
-            }
-            main();
-            // console.log('doScroll')
+const ParticlesAppJs = () => {
+    // eslint-disable-next-line no-undef
+    particlesJS('particles',
+        {
+            'particles': {
+                'number': {
+                    'value': 60,
+                    'density': {
+                        'enable': true,
+                        'value_area': 400
+                    }
+                },
+                'color': {
+                    'value': '#f7f7f7'
+                },
+                'shape': {
+                    'type': 'star',
+                    'stroke': {
+                        'width': 0,
+                        'color': '#000000'
+                    },
+                    'polygon': {
+                        'nb_sides': 5
+                    },
+                    'image': {
+                        'src': 'img/github.svg',
+                        'width': 100,
+                        'height': 100
+                    }
+                },
+                'opacity': {
+                    'value': 0.6,
+                    'random': true,
+                    'anim': {
+                        'enable': false,
+                        'speed': 1,
+                        'opacity_min': 0,
+                        'sync': true
+                    }
+                },
+                'size': {
+                    'value': 3,
+                    'random': true,
+                    'anim': {
+                        'enable': false,
+                        'speed': 4,
+                        'size_min': 0.3,
+                        'sync': false
+                    }
+                },
+                'line_linked': {
+                    'enable': false,
+                    'distance': 150,
+                    'color': '#ffffff',
+                    'opacity': 0.4,
+                    'width': 1
+                },
+                'move': {
+                    'enable': true,
+                    'speed': 0.8,
+                    'direction': 'top-right',
+                    'random': true,
+                    'straight': false,
+                    'out_mode': 'out',
+                    'bounce': false,
+                    'attract': {
+                        'enable': false,
+                        'rotateX': 600,
+                        'rotateY': 600
+                    }
+                }
+            },
+            'interactivity': {
+                'detect_on': 'canvas',
+                'events': {
+                    'onhover': {
+                        'enable': true,
+                        'mode': 'bubble'
+                    },
+                    'onclick': {
+                        'enable': false,
+                        'mode': 'repulse'
+                    },
+                    'resize': true
+                },
+                'modes': {
+                    'grab': {
+                        'distance': 100,
+                        'line_linked': {
+                            'opacity': 1
+                        }
+                    },
+                    'bubble': {
+                        'distance': 100,
+                        'size': 0,
+                        'duration': 2,
+                        'opacity': 0,
+                        'speed': 3
+                    },
+                    'repulse': {
+                        'distance': 400,
+                        'duration': 0.4
+                    },
+                    'push': {
+                        'particles_nb': 4
+                    },
+                    'remove': {
+                        'particles_nb': 2
+                    }
+                }
+            },
+            'retina_detect': true
         }
+    );
+};
+
+const RegisterNavbarFixServer = () => {
+
+    /* 添加背景色 */
+    const navbar = $('.is-fixed-top');
+    const navbar1 = $('.justify-content-start');
+    if (navbar.offset().top > 12) {
+        navbar.addClass('navbar-highlight');
+        navbar1.addClass('navbar-highlight');
+    } else {
+        navbar.removeClass('navbar-highlight');
+        navbar1.removeClass('navbar-highlight');
     }
+    $(window).scroll(() => {
+        if (navbar.offset().top > 12) {
+            navbar.addClass('navbar-highlight');
+            navbar1.addClass('navbar-highlight');
+        } else {
+            navbar.removeClass('navbar-highlight');
+            navbar1.removeClass('navbar-highlight');
+        }
+    });
 };
 
-
-//可添加其他方法
-const main = () => {
+$(document).ready(() => {
+    // eslint-disable-next-line new-cap
+    RegisterParticleServer();
+    // eslint-disable-next-line new-cap
     RegisterDarkModeServer();
+    // eslint-disable-next-line new-cap
     RegisterOperationTimeServer();
-};
-
-run();        //入口方法
+    // eslint-disable-next-line new-cap
+    // RegisterNavbarFixServer();
+});
 
 // var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window));

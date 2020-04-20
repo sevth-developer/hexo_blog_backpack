@@ -1,11 +1,5 @@
 /* eslint-disable node/no-unsupported-features/node-builtins */
-// (mainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings));
-
 function loadMainJs($, moment, ClipboardJS, config) {
-    if (!$('.columns .column-right-shadow').children().length) {
-        $('.columns .column-right-shadow').append($('.columns .column-right').children().clone());
-    }
-
     $('.article img:not(".not-gallery-item")').each(function () {
         // wrap images with link and add caption if possible
         if ($(this).parent('a').length === 0) {
@@ -16,15 +10,19 @@ function loadMainJs($, moment, ClipboardJS, config) {
         }
     });
 
-    // render images
-    if (typeof ($.fn.lightGallery) === 'function') {
-        $('.article').lightGallery({ selector: '.gallery-item', mode: 'lg-fade' });
+    // render image
+    if (typeof $.fn.lightGallery === 'function') {
+        $('.article').lightGallery({selector: '.gallery-item', mode: 'lg-fade'});
     }
-    if (typeof ($.fn.justifiedGallery) === 'function') {
+    if (typeof $.fn.justifiedGallery === 'function') {
         if ($('.justified-gallery > p > .gallery-item').length) {
             $('.justified-gallery > p > .gallery-item').unwrap();
         }
         $('.justified-gallery').justifiedGallery({ rowHeight: 230, margins: 4 });
+    }
+
+    if (!$('.columns .column-right-shadow').children().length) {
+        $('.columns .column-right-shadow').append($('.columns .column-right').children().clone());
     }
 
     if (typeof moment === 'function') {
@@ -47,18 +45,16 @@ function loadMainJs($, moment, ClipboardJS, config) {
             $('.navbar-main .navbar-menu').removeClass('justify-content-start');
         }
     }
+
     adjustNavbar();
     $(window).resize(adjustNavbar);
 
-    function toggleFold(codeBlock, isFolded) {
-        const $toggle = $(codeBlock).find('.fold i');
-        !isFolded ? $(codeBlock).removeClass('folded') : $(codeBlock).addClass('folded');
-        !isFolded ? $toggle.removeClass('fa-angle-right') : $toggle.removeClass('fa-angle-down');
-        !isFolded ? $toggle.addClass('fa-angle-down') : $toggle.addClass('fa-angle-right');
-    }
-
-    function createFoldButton(fold) {
-        return '<span class="fold">' + (fold === 'unfolded' ? '<i class="fas fa-angle-down"></i>' : '<i class="fas fa-angle-right"></i>') + '</span>';
+    function createFoldButton() {
+        return '<span class="fold">'
+            + '<i id="fold-1" class="fas fa-circle" style="color: #fc625d"></i>' // fa-times-circle
+            + '<i id="fold-2" class="fas fa-circle" style="color: #fdbc40"></i>' // fa-minus-circle
+            + '<i id="fold-3" class="fas fa-circle" style="color: #35cd4b"></i>' // fa-plus-circle
+            + '</span>';
     }
 
     $('figure.highlight table').wrap('<div class="highlight-body">');
@@ -76,7 +72,7 @@ function loadMainJs($, moment, ClipboardJS, config) {
         });
 
 
-        const clipboard = config.article.highlight.clipboard;
+        const clipboardOpt = config.article.highlight.clipboard;
         const fold = config.article.highlight.fold.trim();
 
         $('figure.highlight').each(function () {
@@ -87,13 +83,13 @@ function loadMainJs($, moment, ClipboardJS, config) {
                 $(this).find('figcaption div.level-left').append($(this).find('figcaption').find('span'));
                 $(this).find('figcaption div.level-right').append($(this).find('figcaption').find('a'));
             } else {
-                if (clipboard || fold) {
+                if (clipboardOpt || fold) {
                     $(this).prepend('<figcaption class="level is-mobile"><div class="level-left"></div><div class="level-right"></div></figcaption>');
                 }
             }
         });
 
-        if (typeof ClipboardJS !== 'undefined' && clipboard) {
+        if (typeof ClipboardJS !== 'undefined' && clipboardOpt) {
             $('figure.highlight').each(function () {
                 const id = 'code-' + Date.now() + (Math.random() * 1000 | 0);
                 const button = '<a href="javascript:;" class="copy" title="Copy" data-clipboard-target="#' + id + ' .code"><i class="fas fa-copy"></i></a>';
@@ -109,18 +105,39 @@ function loadMainJs($, moment, ClipboardJS, config) {
                     const span = $(this).find('figcaption').find('span');
                     if (span[0].innerText.indexOf('>folded') > -1) {
                         span[0].innerText = span[0].innerText.replace('>folded', '');
-                        $(this).find('figcaption div.level-left').prepend(createFoldButton('folded'));
-                        toggleFold(this, true);
+                        $(this).find('figcaption div.level-left').prepend(createFoldButton());
                         return;
                     }
                 }
-                $(this).find('figcaption div.level-left').prepend(createFoldButton(fold));
-                toggleFold(this, fold === 'folded');
+                $(this).find('figcaption div.level-left').prepend(createFoldButton());
             });
 
-            $('figure.highlight figcaption .fold').click(function () {
-                const $code = $(this).closest('figure.highlight');
-                toggleFold($code.eq(0), !$code.hasClass('folded'));
+            $('figure.highlight figcaption .fold').hover(function () {
+                $(this).find('#fold-1').removeClass('fa-circle').addClass('fa-times-circle');
+                $(this).find('#fold-2').removeClass('fa-circle').addClass('fa-minus-circle');
+                $(this).find('#fold-3').removeClass('fa-circle').addClass('fa-plus-circle');
+            }, function () {
+                $(this).find('#fold-1').removeClass('fa-times-circle').addClass('fa-circle');
+                $(this).find('#fold-2').removeClass('fa-minus-circle').addClass('fa-circle');
+                $(this).find('#fold-3').removeClass('fa-plus-circle').addClass('fa-circle');
+            });
+
+            $('figure.highlight figcaption .fold #fold-1').click(function () {
+                $(this).closest('.highlight-container').remove();
+            });
+
+            $('figure.highlight figcaption .fold #fold-2').click(function () {
+                const container = $(this).closest('figure.highlight');
+                if (!container.hasClass('folded')) {
+                    container.addClass('folded');
+                }
+            });
+
+            $('figure.highlight figcaption .fold #fold-3').click(function () {
+                const container = $(this).closest('figure.highlight');
+                if (container.hasClass('folded')) {
+                    container.removeClass('folded');
+                }
             });
         }
     }
@@ -146,12 +163,13 @@ function loadMainJs($, moment, ClipboardJS, config) {
     function isExternalLink(input, sitehost, exclude) {
         try {
             sitehost = new URL(sitehost).hostname;
-        } catch (e) { }
+        } catch (e) {
+        }
 
         if (!sitehost) return false;
 
         // handle relative url
-        var data;
+        let data;
         try {
             data = new URL(input, 'http://' + sitehost);
         } catch (e) {
@@ -194,37 +212,11 @@ function loadMainJs($, moment, ClipboardJS, config) {
             link.target = '_blank';
         });
     }
-    // load toc fold or show
     loadToc();
 }
 
-function loadMathJax() { //加载mathjax
-    $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function () {
-        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] } });
-        var math = document.getElementsByClassName("entry-content")[0];
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub, math]);
-    });
-}
-
-$(document).ready(function () {
+$(document).ready(() => {
     loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
-    /* 添加背景色 */
-    var navbar = $(".is-fixed-top");
-    var navbar1 = $(".justify-content-start");
-    if (navbar.offset().top > 12) {
-        navbar.addClass("navbar-highlight");
-        navbar1.addClass("navbar-highlight");
-    } else {
-        navbar.removeClass("navbar-highlight");
-        navbar1.removeClass("navbar-highlight");
-    }
-    $(window).scroll(function () {
-        if (navbar.offset().top > 12) {
-            navbar.addClass("navbar-highlight");
-            navbar1.addClass("navbar-highlight");
-        } else {
-            navbar.removeClass("navbar-highlight");
-            navbar1.removeClass("navbar-highlight");
-        }
-    });
 });
+
+
