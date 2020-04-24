@@ -246,7 +246,7 @@ $(document).ready(() => {
     // eslint-disable-next-line new-cap
     RegisterOperationTimeServer();
     // eslint-disable-next-line new-cap
-    // RegisterNavbarFixServer();
+    RegisterNavbarFixServer();
 });
 
 // var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window));
