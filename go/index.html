@@ -15,12 +15,13 @@ function scrollMSG() {
 }
 scrollMSG();
 </script>
-<script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.min.js"></script>
+<script src="/customize/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
+
 	$.get('https://api.sevth.com/v1/url?sc=' + window.location.search.substring(1), function (e) {
         if (e.code === 1) {
             setTimeout(function () {
-                window.location.href = e.data.long_url;
+                window.location.replace(e.data.long_url);
             }, 500)
         }
     })
