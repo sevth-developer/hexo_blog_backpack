@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://sevth.com/"/>
-  <updated>2020-04-29T08:01:37.268Z</updated>
+  <updated>2020-05-02T18:08:53.139Z</updated>
   <id>https://sevth.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>golang 跨平台编译指南</title>
+    <link href="https://sevth.com/study/golang/golang%20%E8%B7%A8%E5%B9%B3%E5%8F%B0%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97.html"/>
+    <id>https://sevth.com/study/golang/golang%20%E8%B7%A8%E5%B9%B3%E5%8F%B0%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97.html</id>
+    <published>2020-05-02T14:36:06.000Z</published>
+    <updated>2020-05-02T18:08:53.139Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>今日 <code>get</code> , <code>golang</code> 的跨平台编译</p></blockquote><a id="more"></a><h3 id="一些编译说明"><a href="#一些编译说明" class="headerlink" title="一些编译说明"></a>一些编译说明</h3><p>Golang 作为一门跨平台语言，编译的时候自然也是可以跨平台编译的。</p><p><code>Mac</code> 平台下跨平台编译其他平台应用：</p><div class="highlight-container"><figure class=" highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go//linux</span><br><span class="line">CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build main.go// windows</span><br></pre></td></tr></table></figure></div><p>跨平台的编译操作都像上面的这个样子,我们来分析一下这一条代码的内容：</p><p> <code>CGO_ENABLED</code> ：因为我们是跨平台编译，<code>go</code>并不支持<code>CGO</code>，所以我们需要关闭它。</p><p><code>GOOS</code> ：这个是设置你要编译的平台，目前可选的有(darwin, freebsd, linux, windows)</p><p><code>GOARCH</code>： 这是目标系统的架构，比如(386, amd64, arm)。<code>386</code>就是32位的平台，<code>amd64</code>就是64位平台。</p><h3 id="各平台的一些区别"><a href="#各平台的一些区别" class="headerlink" title="各平台的一些区别"></a>各平台的一些区别</h3><p>在 <code>windows</code> 下，我们的编译指令有些不同，如下：</p><div class="highlight-container"><figure class=" highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SET CGO_ENABLED=0</span><br><span class="line">SET GOOS=darwin</span><br><span class="line">SET GOARCH=amd64</span><br><span class="line">go build main.go//编译mac平台64位应用</span><br></pre></td></tr></table></figure></div><p>参数都是一样的，只不过<code>windows</code>下需要分四步输入才能编译，而对于<code>linux</code> 与 <code>mac</code>，它们的指令使用都是一致的，只需要一条即可交叉编译。</p><h3 id="一些注意的事情"><a href="#一些注意的事情" class="headerlink" title="一些注意的事情"></a>一些注意的事情</h3><p>比如我们编译的时候碰到下面这种</p><p><img src="https://img.sevth.com/test/2020/cXxrCLTSShxKEGIU.png" alt="image-20200503020400390"></p><p>其实仔细理一下错误，这就是缺少一些需要的包而已，我们可以直接使用<code>go get github.com/xxx/xxx</code> 的方式直接下载，如果下载存在问题，建议直接到<code>github</code>上手动下载，然后将包放到对应的文件位置，然后我们就可以编译通过了。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;今日 &lt;code&gt;get&lt;/code&gt; , &lt;code&gt;golang&lt;/code&gt; 的跨平台编译&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="study" scheme="https://sevth.com/categories/study/"/>
+    
+      <category term="golang" scheme="https://sevth.com/categories/study/golang/"/>
+    
+    
+      <category term="golang" scheme="https://sevth.com/tags/golang/"/>
+    
+      <category term="across paltform" scheme="https://sevth.com/tags/across-paltform/"/>
+    
+  </entry>
   
   <entry>
     <title>golang：随机数的产生</title>
