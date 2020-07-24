@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://sevth.com/"/>
-  <updated>2020-05-21T19:39:51.085Z</updated>
+  <updated>2020-07-24T14:10:52.427Z</updated>
   <id>https://sevth.com/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>vue使用动态路由,Eslint报错解决</title>
+    <link href="https://sevth.com/study/vue/vue%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1,Eslint%E6%8A%A5%E9%94%99%E8%A7%A3%E5%86%B3.html"/>
+    <id>https://sevth.com/study/vue/vue%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1,Eslint%E6%8A%A5%E9%94%99%E8%A7%A3%E5%86%B3.html</id>
+    <published>2020-07-24T13:59:04.000Z</published>
+    <updated>2020-07-24T14:10:52.427Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>发现问题也只是工作的时候发现的，算不上什么大问题，最简单解决办法就是直接关闭 <code>Eslint</code>了，然后百度网上查了一下，发现找到相关解决办法，就记录一下。</p></blockquote><a id="more"></a><p>随便一提，做项目的时候，用了动态路由，之前用的 <code>laravel-mix</code> 打包，傻瓜化配置,后来因为一些别的问题，自定义某些配置一直有问题，就转向了官方的怀抱，用<code>vue-cli</code>重新配置项目，就启用了<code>Eslint</code>这个折磨人的东西。</p><p>发现问题是IDE直接报错提示的：</p><div class="highlight-container"><figure class=" highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route.component = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">import</span>((<span class="string">`@/<span class="subst">$&#123;url&#125;</span>`</span>))</span><br></pre></td></tr></table></figure></div><p>其实就是后台返回路由，前端再动态注册，解决办法就是换个写法.</p><div class="highlight-container"><figure class=" highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route.component = <span class="function"><span class="params">resolve</span> =&gt;</span> <span class="built_in">require</span>([<span class="string">`@/<span class="subst">$&#123;url&#125;</span>`</span>], resolve)</span><br></pre></td></tr></table></figure></div><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul><li><a href="/go/?p">链接</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;发现问题也只是工作的时候发现的，算不上什么大问题，最简单解决办法就是直接关闭 &lt;code&gt;Eslint&lt;/code&gt;了，然后百度网上查了一下，发现找到相关解决办法，就记录一下。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="study" scheme="https://sevth.com/categories/study/"/>
+    
+      <category term="vue" scheme="https://sevth.com/categories/study/vue/"/>
+    
+    
+      <category term="vue" scheme="https://sevth.com/tags/vue/"/>
+    
+      <category term="router" scheme="https://sevth.com/tags/router/"/>
+    
+      <category term="eslint" scheme="https://sevth.com/tags/eslint/"/>
+    
+  </entry>
   
   <entry>
     <title>基于go语言编写的简单api爬虫</title>
